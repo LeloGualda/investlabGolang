@@ -1,0 +1,5 @@
+---
+dir_web: /ui-browser
+dir_core: /cmd
+dir_web_builder: /web
+dir_bin: /bin

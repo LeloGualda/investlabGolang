@@ -1,0 +1,1 @@
+./bin/server --mysqlCon root:123456@/mydb

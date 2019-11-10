@@ -1,0 +1,52 @@
+---
+# TODO: FAZER O SCRIPT DE INIT
+# - name: "install dependency golang"
+#   command: sh "install.sh"
+#   args:
+#     chdir: "{{ dir_local }}{{ dir_core }}"
+#   become: no
+
+# - name: print out the hostname of target
+#   command: hostname
+
+- name: install front-end
+  command: "yarn"
+  args:
+      chdir: "{{ dir_local }}{{ dir_web }}"
+  become: no
+
+- name: build front-end
+  command: "npm run build"
+  args:
+      chdir: "{{ dir_local }}{{ dir_web }}"
+  become: no
+
+- name: Creates remove bin
+  file:
+    path: "{{ dir_local }}{{ dir_bin }}"
+    state: absent
+  become: no
+
+- name: Creates directory bin
+  file:
+    path: "{{ dir_local }}{{ dir_bin }}"
+    state: directory
+  become: no
+
+- name: Creates directory bin
+  file:
+    path: "{{ dir_local }}{{ dir_bin }}/files"
+    state: directory
+  become: no
+
+- name: "Building core"
+  command: "go build -o bin/server .{{ dir_core }}"
+  args:
+    chdir: "{{ dir_local }}"
+  become: no
+
+- name: "copy build front"
+  command: "cp ./{{ dir_web_builder }} ./{{dir_bin}} -r"
+  args:
+    chdir: "{{ dir_local }}"
+  become: no

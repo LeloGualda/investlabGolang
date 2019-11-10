@@ -1,0 +1,19 @@
+---
+
+- name: install-development
+  hosts: 127.0.0.1
+  connection: local
+  become: yes
+  tasks:
+
+  - name: 'Install dependecies front-end'
+    apt:
+      update_cache: yes
+      cache_valid_time: 3600 #1 hora
+      name: "{{ item }}"
+      state: latest
+    become: yes
+      with_items:
+        - yarn
+        - npm
+        - golang

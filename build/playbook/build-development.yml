@@ -1,0 +1,20 @@
+---
+
+- name: build-development
+  connection: local
+  become: yes
+  tasks:
+  - name: print out the hostname of target
+    command: hostname
+
+  - name: install front-end
+    command: "yarn"
+    args:
+        chdir: "{{ mydir_front }}"
+    become: no
+
+  - name: build front-end
+    command: "npm run build"
+    args:
+        chdir: "{{ mydir_front }}"
+    become: no
