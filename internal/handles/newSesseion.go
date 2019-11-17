@@ -4,11 +4,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+
+	"../structs"
 )
 
 // NewSesseion try create new session
 func NewSesseion(w http.ResponseWriter, r *http.Request) {
-	creds := &Credentials{}
+	creds := &structs.Credentials{}
 	err := json.NewDecoder(r.Body).Decode(creds)
 	if err != nil {
 		fmt.Println(err.Error())

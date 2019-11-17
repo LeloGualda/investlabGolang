@@ -1,8 +1,12 @@
-package handles
+package querys
 
-import "fmt"
+import (
+	"fmt"
 
-func queryUpdateAcoesCarteira(acao AcoesDoUsuario) bool {
+	"../structs"
+)
+
+func QueryUpdateAcoesCarteira(acao structs.AcoesDoUsuario) bool {
 
 	query := `
 	UPDATE carteira SET
@@ -20,7 +24,7 @@ func queryUpdateAcoesCarteira(acao AcoesDoUsuario) bool {
 	return true
 }
 
-func queryGetAcoesCarteiraUser(id_user, limit int, codigo string, venda bool) []AcoesDoUsuario {
+func QueryGetAcoesCarteiraUser(id_user, limit int, codigo string, venda bool) []structs.AcoesDoUsuario {
 
 	query := `
 	select codigo,venda,lance,id_carteira
@@ -38,10 +42,10 @@ func queryGetAcoesCarteiraUser(id_user, limit int, codigo string, venda bool) []
 		return nil
 	}
 
-	var acoes = []AcoesDoUsuario{}
+	var acoes = []structs.AcoesDoUsuario{}
 
 	for rows.Next() {
-		acao := &AcoesDoUsuario{}
+		acao := &structs.AcoesDoUsuario{}
 		//TODO: USANDO QUANTIDADE COMO ID ALTERAR
 		rows.Scan(&acao.Codigo, &acao.Venda, &acao.Lance, &acao.Qtd)
 

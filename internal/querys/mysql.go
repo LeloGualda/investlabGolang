@@ -1,9 +1,10 @@
-package handles
+package querys
 
 import (
 	"database/sql"
 	"fmt"
 
+	"../structs"
 	_ "github.com/go-sql-driver/mysql"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -16,37 +17,6 @@ var db *sql.DB
 // 	Id_user int    `json:"id_user", db:"_user"`
 // }
 
-type User struct {
-	Username string `json:"username", db:"username"`
-	ID       int    `json:"id", db:"id_user"`
-}
-type Carteira struct {
-	ID     int    `json:"id", db:"id_user"`
-	Codigo string `json:"codigo", db:"codigo"`
-	Venda  bool   `json:"venda", db:"venda"`
-	Lance  int    `json:"lance", db:"lance"`
-}
-
-type TransacaoCompra struct {
-	Codigo      string  `json:"codigo", db:"codigo"`
-	Data        string  `json:"data", db:"data"`
-	Valor       float64 `json:"valor", db:"valor"`
-	valorVenda  float64 `json:"valorVenda", db:"valorVenda"`
-	Lance       int     `json:"lance", db:"lance"`
-	IdUserVenda int     `json:"id_user", db:"id_user"`
-}
-
-type Lances struct {
-	Codigo string  `json:"codigo", db:"codigo"`
-	Valor  float64 `json:"valor", db:"valor"`
-	Qtd    int     `json:"qtd", db:"qtd"`
-}
-
-type CarteiraUser struct {
-	IDUser     int `json:"iduser", db:"id_user"`
-	IDCarteira int `json:"idcarteira", db:"id_carteira"`
-}
-
 func Connection(mysqlCon string) {
 	var err error
 	fmt.Println(mysqlCon)
@@ -58,8 +28,8 @@ func Connection(mysqlCon string) {
 	fmt.Println("conected mysql")
 }
 
-func queryGetUseID(username string) int {
-	u := &User{}
+func QueryGetUseID(username string) int {
+	u := &structs.User{}
 	err := db.QueryRow("SELECT id_user FROM usuario WHERE username = ?", username).Scan(&u.ID)
 	if err != nil {
 		fmt.Println(err.Error())
@@ -68,8 +38,8 @@ func queryGetUseID(username string) int {
 	return u.ID
 }
 
-func queryGetPassword(cred Credentials) (password string, err error) {
-	storedCreds := &Credentials{}
+func QueryGetPassword(cred structs.Credentials) (password string, err error) {
+	storedCreds := &structs.Credentials{}
 	query := "select password from usuario where username='" + cred.Username + "'"
 	result := db.QueryRow(query)
 	err = result.Scan(&storedCreds.Password)
@@ -77,47 +47,22 @@ func queryGetPassword(cred Credentials) (password string, err error) {
 	return
 }
 
-// func queryGetAcoes() []ApiAcao {
-// 	var apis = []ApiAcao{}
+func QueryGetAcoes() []structs.ApiAcao {
+	var apis = []structs.ApiAcao{}
 
-// 	query := "select * from acoes"
-// 	rows, _ := db.Query(query)
+	query := "select * from acoes"
+	rows, _ := db.Query(query)
 
-// 	for rows.Next() {
-// 		api := &ApiAcao{}
-// 		rows.Scan(&api.Codigo, &api.Name, &api.Region, &api.Type, &api.Currency)
-// 		apis = append(apis, *api)
-// 	}
-
-// 	return apis
-// }
-
-// func insertAcao(acao ApiAcao) {
-// 	query := "INSERT INTO acoes (codigo,nome,regiao,tipo,moeda) VALUES (?,?,?,?,?);"
-// 	_, err := db.Query(query, acao.Codigo, acao.Name, acao.Region, acao.Type, acao.Currency)
-// 	if err != nil {
-// 		fmt.Println(err.Error())
-// 	}
-// }
-
-func insertCarteira(carteira Carteira) {
-	query := "INSERT INTO carteira (id_user,codigo,venda,lance) VALUES (?,?,?,?);"
-	_, err := db.Query(query, carteira.ID, carteira.Codigo, carteira.Venda, carteira.Lance)
-	if err != nil {
-		fmt.Println(err.Error())
+	for rows.Next() {
+		api := &structs.ApiAcao{}
+		rows.Scan(&api.Codigo, &api.Name, &api.Region, &api.Type, &api.Currency)
+		apis = append(apis, *api)
 	}
+
+	return apis
 }
 
-// func insertValorAcao(valor BaseValores) {
-// 	query := "INSERT INTO valores (codigo,data,valor) VALUES (?,?,?);"
-
-// 	_, err := db.Query(query, valor.Codigo, valor.Date, valor.Valor)
-// 	if err != nil {
-// 		fmt.Println(err.Error())
-// 	}
-// }
-
-func insertTransacao(trans Transacao) {
+func InsertTransacao(trans structs.Transacao) {
 	query := "INSERT INTO transacao(data,valor,id_user,tipo,descricao) VALUES (?,?,?,?,?);"
 
 	date := ""
@@ -133,7 +78,7 @@ func insertTransacao(trans Transacao) {
 	}
 }
 
-func createUser(creds Credentials) error {
+func CreateUser(creds structs.Credentials) error {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(creds.Password), 8)
 	query := "insert into usuario (username,password) values ('" + creds.Username + "','" + string(hashedPassword) + "')"
 	_, err = db.Query(query)
@@ -147,8 +92,9 @@ func dropDb() {
 	}
 }
 
-func queryGetTransCompra(idAcao int) TransacaoCompra {
-	transC := &TransacaoCompra{}
+func QueryGetTransCompra(idAcao int) structs.TransacaoCompra {
+	transC := &structs.TransacaoCompra{}
+
 	query := `
 
 	select valores.data,
@@ -167,7 +113,7 @@ func queryGetTransCompra(idAcao int) TransacaoCompra {
 
 	result := db.QueryRow(query, idAcao)
 
-	err := result.Scan(&transC.Data, &transC.Lance, &transC.Lance, &transC.Codigo, &transC.IdUserVenda, &transC.valorVenda)
+	err := result.Scan(&transC.Data, &transC.Lance, &transC.Lance, &transC.Codigo, &transC.IdUserVenda, &transC.ValorVenda)
 
 	if err != nil {
 		fmt.Println(err.Error())
@@ -176,12 +122,12 @@ func queryGetTransCompra(idAcao int) TransacaoCompra {
 	return *transC
 }
 
-func removeCarteira(id int) {
+func RemoveCarteira(id int) {
 	db.Query("DELETE FROM carteira WHERE carteira.id_carteira = ?;", id)
 
 }
 
-func queryGetLancesAcao(codigo string, id_user int) []Lances {
+func QueryGetLancesAcao(codigo string, id_user int) []structs.Lances {
 
 	query := `
 	select
@@ -205,7 +151,7 @@ func queryGetLancesAcao(codigo string, id_user int) []Lances {
 				   valores.data = (select max(data) from valores group by codigo)) as a
 				   where codigo = "` + codigo + `"group by codigo,lance,valor order by lance, qtd desc;`
 
-	var lances = []Lances{}
+	var lances = []structs.Lances{}
 
 	rows, err := db.Query(query, id_user)
 	if err != nil {
@@ -213,7 +159,7 @@ func queryGetLancesAcao(codigo string, id_user int) []Lances {
 	}
 
 	for rows.Next() {
-		lance := &Lances{}
+		lance := &structs.Lances{}
 
 		rows.Scan(&lance.Codigo, &lance.Qtd, &lance.Valor)
 
@@ -222,7 +168,7 @@ func queryGetLancesAcao(codigo string, id_user int) []Lances {
 	return lances
 }
 
-func queryGetCarteiraUser(codigo string, valor float64) []CarteiraUser {
+func QueryGetCarteiraUser(codigo string, valor float64) []structs.CarteiraUser {
 
 	query := `
 	select  
@@ -239,7 +185,7 @@ func queryGetCarteiraUser(codigo string, valor float64) []CarteiraUser {
 				valores.data = (select max(data) from valores group by codigo);
 	`
 
-	var carts = []CarteiraUser{}
+	var carts = []structs.CarteiraUser{}
 
 	rows, err := db.Query(query)
 
@@ -248,7 +194,7 @@ func queryGetCarteiraUser(codigo string, valor float64) []CarteiraUser {
 	}
 
 	for rows.Next() {
-		car := &CarteiraUser{}
+		car := &structs.CarteiraUser{}
 
 		rows.Scan(&car.IDCarteira, &car.IDUser)
 

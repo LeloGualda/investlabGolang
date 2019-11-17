@@ -4,12 +4,15 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+
+	"../querys"
+	"../structs"
 )
 
 // Signup create new user
 func Signup(w http.ResponseWriter, r *http.Request) {
 
-	creds := &Credentials{}
+	creds := &structs.Credentials{}
 	err := json.NewDecoder(r.Body).Decode(creds)
 
 	if err != nil {
@@ -18,7 +21,7 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = createUser(*creds)
+	err = querys.CreateUser(*creds)
 
 	if err != nil {
 		fmt.Println(err.Error())

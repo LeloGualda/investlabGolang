@@ -1,4 +1,4 @@
-package handles
+package querys
 
 import "fmt"
 
@@ -8,7 +8,7 @@ type BaseValores struct {
 	Valor  float64 `json:"valor",db:"valor"`
 }
 
-func queryGetCompraAcoes() []BaseValores {
+func QueryGetCompraAcoes() []BaseValores {
 
 	query := `
 	select
@@ -37,7 +37,7 @@ func queryGetCompraAcoes() []BaseValores {
 	return valores
 }
 
-func queryGetAcoesTemporal(codigo string) []BaseValores {
+func QueryGetAcoesTemporal(codigo string) []BaseValores {
 
 	query := `
 	SELECT valores.data,valores.valor,valores.codigo  FROM mydb.valores

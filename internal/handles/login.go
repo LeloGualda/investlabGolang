@@ -4,13 +4,15 @@ import (
 	"fmt"
 	"net/http"
 
+	"../querys"
+	"../structs"
 	"golang.org/x/crypto/bcrypt"
 )
 
-func checkUser(r *http.Request) (valid bool, userOb User) {
+func checkUser(r *http.Request) (valid bool, userOb structs.User) {
 	user, pass, _ := r.BasicAuth()
 
-	cred := Credentials{
+	cred := structs.Credentials{
 		Username: user,
 		Password: pass,
 	}
@@ -18,8 +20,8 @@ func checkUser(r *http.Request) (valid bool, userOb User) {
 	valid = checkCredentials(cred)
 
 	if valid {
-		id := queryGetUseID(cred.Username)
-		userOb = User{
+		id := querys.QueryGetUseID(cred.Username)
+		userOb = structs.User{
 			Username: user,
 			ID:       id,
 		}
@@ -27,9 +29,9 @@ func checkUser(r *http.Request) (valid bool, userOb User) {
 	return
 }
 
-func checkCredentials(cred Credentials) bool {
+func checkCredentials(cred structs.Credentials) bool {
 
-	password, err := queryGetPassword(cred)
+	password, err := querys.QueryGetPassword(cred)
 
 	if err != nil {
 		fmt.Println("login:" + cred.Username)

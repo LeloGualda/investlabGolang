@@ -8,42 +8,15 @@ import (
 	"net/http"
 	"strconv"
 	"time"
+
+	"../querys"
+	"../structs"
 )
 
-type ApiAcao struct {
-	Codigo   string `json:"1. symbol", db:"codigo"`
-	Name     string `json:"2. name", db:"nome"`
-	Type     string `json:"3. type", db:"tipo"`
-	Region   string `json:"4. region", db:"regiao"`
-	Currency string `json:"4. region", db:"moeda"`
-}
+var key = "EUXWPTWM2CR9P8D7"
 
-type ApiPesquisa struct {
-	BestMatches []ApiAcao `json:bestMatches`
-}
-
-type ApiValorAcao struct {
-	Open string `json:"1. open"`
-}
-type ApiInfoAcao struct {
-	Codigo string `json:"2. Symbol"`
-}
-
-type ApiSeriesDay struct {
-	Time map[string]ApiValorAcao `json:"Time Series (Daily)"`
-	Info ApiInfoAcao             `json:"Meta Data"`
-}
-
-type BaseValores struct {
-	Codigo string  `json:"codigo",db:"codigo"`
-	Date   string  `json:"data",db:"data"`
-	Valor  float64 `json:"valor",db:"valor"`
-}
-
-var key = "demo"
-
-func getApiPesquisa(body []byte) (*ApiPesquisa, error) {
-	var s = new(ApiPesquisa)
+func getApiPesquisa(body []byte) (*structs.ApiPesquisa, error) {
+	var s = new(structs.ApiPesquisa)
 	err := json.Unmarshal(body, &s)
 	if err != nil {
 		fmt.Println("whoops:", err)
@@ -55,7 +28,7 @@ func requestApi(param string) []byte {
 	protocol := "https://"
 	hostApi := "www.alphavantage.co/"
 
-	fmt.Println(protocol + hostApi)
+	// fmt.Println(protocol + hostApi)
 	req, _ := http.NewRequest("GET", protocol+hostApi+param, nil)
 	req.Header.Add("Accept", "application/json")
 	req.Header.Add("Cache-Control", "no-cache")
@@ -75,50 +48,50 @@ func requestApi(param string) []byte {
 	}
 	return nil
 }
-func getAPi(keyword string, createTimeLine bool) ApiPesquisa {
+func GetAPi(keyword string, createTimeLine bool) structs.ApiPesquisa {
 
 	param := "query?function=SYMBOL_SEARCH&keywords=" + keyword + "&apikey=" + key
 	body := requestApi(param)
 
 	s, _ := getApiPesquisa([]byte(body))
 
-	for _, el := range s.BestMatches {
-		// insertAcao(el)
-		// time.Sleep(5 * time.Second)
-		if createTimeLine {
-			getSeriesAPi(el.Codigo)
-		}
-	}
+	// for _, el := range s.BestMatches {
+	// 	// querys.InsertAcao(el)
+	// 	time.Sleep(5 * time.Second)
+	// 	if createTimeLine {
+	// 		getSeriesAPi(el.Codigo)
+	// 	}
+	// }
 	return *s
 }
 
-func getSeriesAPi(codigo string) {
+func InserirSeriesAPI(codigo string) {
 	param := "query?function=TIME_SERIES_DAILY&symbol=" + codigo + "&apikey=" + key
 	body := requestApi(param)
-	var s = new(ApiSeriesDay)
+	var s = new(structs.ApiSeriesDay)
 	err := json.Unmarshal(body, &s)
 	fmt.Println("request feito")
 	if err != nil {
 		fmt.Println("whoops:", err)
 	}
 	for k, el := range s.Time {
-		valor := new(BaseValores)
+		valor := new(structs.BaseValores)
 
 		valor.Date = k
 		valor.Valor, _ = strconv.ParseFloat(el.Open, 64)
 		valor.Codigo = s.Info.Codigo
 
-		// insertValorAcao(*valor)
+		querys.InsertValorAcao(*valor)
 	}
 }
 
-func inserSeriesOfAcoes() {
-	// api := queryGetAcoes()
-	// for _, el := range api {
-	// 	getSeriesAPi(el.Codigo)
-	// 	time.Sleep(10 * time.Second)
-	// }
-}
+// func inserSeriesOfAcoes() {
+// 	api := querys.QueryGetAcoes()
+// 	for _, el := range api {
+// 		GetSeriesAPi(el.Codigo)
+// 		time.Sleep(10 * time.Second)
+// 	}
+// }
 
 func createBot() {
 

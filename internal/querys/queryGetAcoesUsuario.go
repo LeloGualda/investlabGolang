@@ -1,18 +1,13 @@
-package handles
+package querys
 
 import (
 	"fmt"
 	"strconv"
+
+	"../structs"
 )
 
-type AcoesDoUsuario struct {
-	Codigo string `json:"codigo", db:"codigo"`
-	Lance  int    `json:"lance", db:"lance"`
-	Qtd    int    `json:"qtd", db:"qtd"`
-	Venda  bool   `json:"venda", db:"venda"`
-}
-
-func queryGetAcoesUsuario(id int) []AcoesDoUsuario {
+func QueryGetAcoesUsuario(id int) []structs.AcoesDoUsuario {
 
 	query := `
 	select codigo,
@@ -33,7 +28,7 @@ func queryGetAcoesUsuario(id int) []AcoesDoUsuario {
 						group by codigo,venda,lance;
 	`
 
-	var acoes = []AcoesDoUsuario{}
+	var acoes = []structs.AcoesDoUsuario{}
 
 	rows, err := db.Query(query)
 
@@ -42,7 +37,7 @@ func queryGetAcoesUsuario(id int) []AcoesDoUsuario {
 	}
 
 	for rows.Next() {
-		acao := &AcoesDoUsuario{}
+		acao := &structs.AcoesDoUsuario{}
 
 		rows.Scan(&acao.Codigo, &acao.Venda, &acao.Lance, &acao.Qtd)
 

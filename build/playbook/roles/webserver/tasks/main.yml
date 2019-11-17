@@ -12,14 +12,20 @@
 - name: install front-end
   command: "yarn"
   args:
-      chdir: "{{ dir_local }}{{ dir_web }}"
+      chdir: "{{ dir_local }}{{ item }}"
   become: no
+  with_items:
+    - "{{ dir_web }}"
+    - "{{ dir_web_admin }}"
 
 - name: build front-end
   command: "npm run build"
   args:
-      chdir: "{{ dir_local }}{{ dir_web }}"
+      chdir: "{{ dir_local }}{{ item }}"
   become: no
+  with_items:
+    - "{{ dir_web }}"
+    - "{{ dir_web_admin }}"
 
 - name: Creates remove bin
   file:

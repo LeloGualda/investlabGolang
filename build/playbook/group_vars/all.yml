@@ -1,5 +1,6 @@
 ---
 dir_web: /ui-browser
+dir_web_admin: /ui-admin
 dir_core: /cmd
 dir_web_builder: /web
 dir_bin: /bin

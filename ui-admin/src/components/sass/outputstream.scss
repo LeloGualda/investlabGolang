@@ -1,0 +1,59 @@
+.outputstream{
+    min-height: 350px;
+    min-width:  500px;
+    border: solid 2px darkgrey;
+    .line{
+        padding: 4px 8px;
+        background-color: cornsilk;
+
+        &:nth-child(odd){
+            background-color: azure;
+        }
+    }
+}
+.Cardcompra{
+  &:hover{
+    background: #74C0FC ;
+  }
+}
+i {
+    border: solid black;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+    
+  }
+  
+  .right {
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+  }
+  
+  .left {
+    transform: rotate(135deg);
+    -webkit-transform: rotate(135deg);
+  }
+  
+  .up {
+    transform: rotate(-135deg);
+    -webkit-transform: rotate(-135deg);
+  }
+  
+  .down {
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+  }
+
+  .container{
+    padding: 50px 50px;
+    // border:solid 1px red;
+    .board-cards{
+      // border: solid 1px blue;
+      display: flex;
+      justify-content: space-around;
+      padding-top: 6px;
+      .border-secondary{
+        margin-top: 4px;
+      }
+    }
+  }

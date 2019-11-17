@@ -1,22 +1,27 @@
 package handles
 
-import "errors"
+import (
+	"errors"
+
+	"../querys"
+	"../structs"
+)
 
 func insertDinheiro(user string, valor float64) {
-	trans := new(Transacao)
-	trans.ID = queryGetUseID(user)
+	trans := new(structs.Transacao)
+	trans.ID = querys.QueryGetUseID(user)
 	trans.Descricao = "deposito"
 	trans.Tipo = 1
 	trans.Valor = valor
-	insertTransacao(*trans)
+	querys.InsertTransacao(*trans)
 }
 
 func insertCompra(userCompra, codigo string, valor float64, qtd int) error {
 
-	lances := queryGetCarteiraUser(codigo, valor)
+	lances := querys.QueryGetCarteiraUser(codigo, valor)
 	for i := 0; i < qtd; i++ {
 
-		transVenda := new(Transacao)
+		transVenda := new(structs.Transacao)
 		transVenda.ID = lances[i].IDUser
 		transVenda.Tipo = 2
 		transVenda.Valor = valor
@@ -27,8 +32,8 @@ func insertCompra(userCompra, codigo string, valor float64, qtd int) error {
 			return err
 		}
 
-		transCompra := new(Transacao)
-		transCompra.ID = queryGetUseID(userCompra)
+		transCompra := new(structs.Transacao)
+		transCompra.ID = querys.QueryGetUseID(userCompra)
 		transCompra.Descricao = "compra acao" + codigo
 		transCompra.Tipo = 3
 		transCompra.Valor = -valor
@@ -37,22 +42,22 @@ func insertCompra(userCompra, codigo string, valor float64, qtd int) error {
 			err := errors.New("usuario de compra não encontrado")
 			return err
 		}
-		saldo := queryGetSaldo(transCompra.ID).Valor
+		saldo := querys.QueryGetSaldo(transCompra.ID).Valor
 
 		if saldo < valor {
 			err := errors.New("sem saldo")
 			return err
 		}
 
-		carteira := new(Carteira)
+		carteira := new(structs.Carteira)
 		carteira.Codigo = codigo
 		carteira.ID = transCompra.ID
 		carteira.Lance = 0
 		carteira.Venda = false
-		insertCarteira(*carteira)
-		removeCarteira(lances[i].IDCarteira)
-		insertTransacao(*transVenda)
-		insertTransacao(*transCompra)
+		querys.InsertCarteira(*carteira)
+		querys.RemoveCarteira(lances[i].IDCarteira)
+		querys.InsertTransacao(*transVenda)
+		querys.InsertTransacao(*transCompra)
 	}
 
 	return nil

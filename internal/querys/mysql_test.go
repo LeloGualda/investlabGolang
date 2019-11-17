@@ -1,4 +1,4 @@
-package handles
+package querys
 
 import "testing"
 

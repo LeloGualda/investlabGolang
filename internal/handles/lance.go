@@ -1,10 +1,14 @@
 package handles
 
-import "net/http"
+import (
+	"net/http"
+
+	"../querys"
+)
 
 func lance(w http.ResponseWriter, r *http.Request, qtd, lance, id_user int, venda bool, codigo string) {
 
-	acoes := queryGetAcoesCarteiraUser(id_user, qtd, codigo, venda)
+	acoes := querys.QueryGetAcoesCarteiraUser(id_user, qtd, codigo, venda)
 
 	for _, acao := range acoes {
 
@@ -15,6 +19,6 @@ func lance(w http.ResponseWriter, r *http.Request, qtd, lance, id_user int, vend
 		}
 
 		acao.Venda = venda
-		queryUpdateAcoesCarteira(acao)
+		querys.QueryUpdateAcoesCarteira(acao)
 	}
 }

@@ -7,11 +7,6 @@ import (
 	"strings"
 )
 
-type Credentials struct {
-	Password string `json:"password", db:"password"`
-	Username string `json:"username", db:"username"`
-}
-
 func Api(w http.ResponseWriter, r *http.Request) {
 	auth, user := checkUser(r)
 	if !auth {
@@ -20,6 +15,20 @@ func Api(w http.ResponseWriter, r *http.Request) {
 	}
 
 	sid := strings.TrimPrefix(r.URL.Path, "/api/")
+
+	if strings.HasPrefix(sid, "admin") {
+		sid = strings.TrimPrefix(sid, "admin/")
+		if strings.HasPrefix(sid, "search/") {
+			keyword, ok := r.URL.Query()["keyword"]
+			if !ok || len(keyword[0]) < 1 {
+				fmt.Println("Url Param 'keyword' is missing")
+				return
+			}
+
+			adminSerachAPI(w, r, keyword[0])
+		}
+
+	}
 
 	if strings.HasPrefix(sid, "comprar") {
 		if sid == "comprar" {
@@ -45,6 +54,7 @@ func Api(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+
 	if strings.HasPrefix(sid, "saldo") {
 		if sid == "saldo" {
 			saldo(w, r, user.ID)
