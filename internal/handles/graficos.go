@@ -11,18 +11,19 @@ var upgrader = websocket.Upgrader{
 	WriteBufferSize: 1024,
 }
 
-func saldo(w http.ResponseWriter, r *http.Request) {
-	conn, _ := upgrader.Upgrade(w, r, nil) // error ignored for sake of simplicity
+// GraficH Gerencia todos os graficos
+func GraficH(w http.ResponseWriter, r *http.Request) {
+	// auth, _ := checkUser(r)
+	// if !auth {
+	// 	w.WriteHeader(http.StatusUnauthorized)
+	// 	return
+	// }
 
-	for {
-		// Read message from browser
-		msgType, msg, err := conn.ReadMessage()
-		if err != nil {
-			return
-		}
-		// Write message back to browser
-		if err = conn.WriteMessage(msgType, msg); err != nil {
-			return
-		}
-	}
+	// sid := strings.TrimPrefix(r.URL.Path, "/grafic/")
+	// println(sid)
+
+	// w.Header().Set("Content-Type", "application/json")
+	// if sid == "saldo" {
+	// 	saldo(w, r)
+	// }
 }

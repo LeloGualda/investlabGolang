@@ -1,28 +1,15 @@
 package handles
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
-
-	"golang.org/x/crypto/bcrypt"
 )
 
 type Credentials struct {
 	Password string `json:"password", db:"password"`
 	Username string `json:"username", db:"username"`
-}
-
-// Test connection
-func Test(w http.ResponseWriter, r *http.Request) {
-	auth, _ := checkUser(r)
-	if !auth {
-		w.WriteHeader(http.StatusUnauthorized)
-		return
-	}
-	println("Test connection ok")
 }
 
 func Api(w http.ResponseWriter, r *http.Request) {
@@ -41,8 +28,15 @@ func Api(w http.ResponseWriter, r *http.Request) {
 		}
 
 		sid = strings.TrimPrefix(sid, "comprar/")
+
+		if strings.HasPrefix(sid, "temporal/") {
+			sid = strings.TrimPrefix(sid, "temporal/")
+			compraTemporalAcao(w, r, sid)
+			return
+		}
+
 		fmt.Println(sid)
-		comprasLances(w, r, sid)
+		comprasLances(w, r, sid, user.ID)
 	}
 
 	if strings.HasPrefix(sid, "acoes") {
@@ -51,6 +45,49 @@ func Api(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+	if strings.HasPrefix(sid, "saldo") {
+		if sid == "saldo" {
+			saldo(w, r, user.ID)
+			return
+		}
+	}
+
+	if strings.HasPrefix(sid, "lance") {
+
+		lancesqtd, ok := r.URL.Query()["qtd"]
+
+		if !ok || len(lancesqtd[0]) < 1 {
+			fmt.Println("Url Param 'vender' is missing")
+			return
+		}
+
+		lanceVender, ok := r.URL.Query()["vender"]
+		if !ok || len(lanceVender[0]) < 1 {
+			fmt.Println("Url Param 'vender' is missing")
+			return
+		}
+
+		lanceValor, ok := r.URL.Query()["lance"]
+
+		if !ok || len(lanceValor[0]) < 1 {
+			fmt.Println("Url Param 'valor do lance' is missing")
+			return
+		}
+
+		lanceCodigo, ok := r.URL.Query()["codigo"]
+
+		if !ok || len(lanceCodigo[0]) < 1 {
+			fmt.Println("Url Param 'valor do lance' is missing")
+			return
+		}
+
+		lanceQtd, _ := strconv.Atoi(lancesqtd[0])
+		lanceValorConv, _ := strconv.Atoi(lanceValor[0])
+		lanceVenda, _ := strconv.ParseBool(lanceVender[0])
+
+		lance(w, r, lanceQtd, lanceValorConv, user.ID, lanceVenda, lanceCodigo[0])
+	}
+
 	if strings.HasPrefix(sid, "vender") {
 
 		sid = strings.TrimPrefix(sid, "vender/")
@@ -89,142 +126,4 @@ func Api(w http.ResponseWriter, r *http.Request) {
 		}
 		venderAcao(w, r, v, codigo, user.Username, i)
 	}
-}
-
-// Comprar connection
-func comprar(w http.ResponseWriter, r *http.Request) {
-	compra := queryGetCompraAcoes()
-	json, _ := json.Marshal(compra)
-	w.Header().Set("Content-Type", "application/json")
-	fmt.Fprint(w, string(json))
-}
-
-func getAcoes(w http.ResponseWriter, r *http.Request, id int) {
-	acoes := queryGetAcoesUsuario(id)
-	json, _ := json.Marshal(acoes)
-	w.Header().Set("Content-Type", "application/json")
-	fmt.Fprint(w, string(json))
-}
-func comprasLances(w http.ResponseWriter, r *http.Request, codigo string) {
-	lances := queryGetLancesAcao(codigo)
-	json, _ := json.Marshal(lances)
-	w.Header().Set("Content-Type", "application/json")
-	fmt.Fprint(w, string(json))
-}
-
-func venderAcao(w http.ResponseWriter, r *http.Request, valor float64, codigo, user string, qtd int) {
-	err := insertCompra(user, codigo, valor, qtd)
-
-	if err != nil {
-		fmt.Println(err.Error())
-	}
-}
-
-// GraficH Gerencia todos os graficos
-func GraficH(w http.ResponseWriter, r *http.Request) {
-	auth, _ := checkUser(r)
-	if !auth {
-		w.WriteHeader(http.StatusUnauthorized)
-		return
-	}
-
-	sid := strings.TrimPrefix(r.URL.Path, "/grafic/")
-	println(sid)
-
-	w.Header().Set("Content-Type", "application/json")
-	if sid == "saldo" {
-		saldo(w, r)
-	}
-}
-
-// UserH send user info or get per user
-func UserH(w http.ResponseWriter, r *http.Request) {
-
-	auth, u := checkUser(r)
-	if !auth {
-		w.WriteHeader(http.StatusUnauthorized)
-		return
-	}
-
-	sid := strings.TrimPrefix(r.URL.Path, "/user/")
-	println(sid)
-
-	w.Header().Set("Content-Type", "application/json")
-	if sid == "info" {
-		json, _ := json.Marshal(u)
-		fmt.Fprint(w, string(json))
-	}
-}
-
-// NewSesseion try create new session
-func NewSesseion(w http.ResponseWriter, r *http.Request) {
-	creds := &Credentials{}
-	err := json.NewDecoder(r.Body).Decode(creds)
-	if err != nil {
-		fmt.Println(err.Error())
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-	erro := !checkCredentials(*creds)
-
-	if erro {
-		w.WriteHeader(http.StatusUnauthorized)
-		return
-	}
-}
-
-// Signup create new user
-func Signup(w http.ResponseWriter, r *http.Request) {
-
-	creds := &Credentials{}
-	err := json.NewDecoder(r.Body).Decode(creds)
-
-	if err != nil {
-		fmt.Println(err.Error())
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-
-	err = createUser(*creds)
-
-	if err != nil {
-		fmt.Println(err.Error())
-		w.WriteHeader(http.StatusInternalServerError)
-	}
-}
-func checkUser(r *http.Request) (valid bool, userOb User) {
-	user, pass, _ := r.BasicAuth()
-
-	cred := Credentials{
-		Username: user,
-		Password: pass,
-	}
-
-	valid = checkCredentials(cred)
-
-	if valid {
-		id := queryGetUseID(cred.Username)
-		userOb = User{
-			Username: user,
-			ID:       id,
-		}
-	}
-	return
-}
-
-func checkCredentials(cred Credentials) bool {
-
-	password, err := queryGetPassword(cred)
-
-	if err != nil {
-		fmt.Println("login:" + cred.Username)
-		fmt.Println(err.Error())
-		return false
-	}
-
-	if err = bcrypt.CompareHashAndPassword([]byte(password), []byte(cred.Password)); err != nil {
-		fmt.Println(err.Error())
-		return false
-	}
-	return true
 }

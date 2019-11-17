@@ -1,0 +1,1 @@
+ansible-playbook -K  -vvvv -i /projects/go/src/investlab/build/playbook/hostsdeploy /projects/go/src/investlab/build/playbook/deploy.yml

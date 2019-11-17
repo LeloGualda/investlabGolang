@@ -11,7 +11,7 @@ export default function venderApi(acao) {
                     setTimeout( ()=> dispatch({ type: actions.vendeuAcoes}),2000)
                 })
                 .catch(error => {
-                    
+                    //TODO
                 })
         } catch (e) {
             console.error(e)

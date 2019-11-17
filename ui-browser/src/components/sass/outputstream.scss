@@ -43,3 +43,17 @@ i {
     transform: rotate(45deg);
     -webkit-transform: rotate(45deg);
   }
+
+  .container{
+    padding: 50px 50px;
+    // border:solid 1px red;
+    .board-cards{
+      // border: solid 1px blue;
+      display: flex;
+      justify-content: space-around;
+      padding-top: 6px;
+      .border-secondary{
+        margin-top: 4px;
+      }
+    }
+  }

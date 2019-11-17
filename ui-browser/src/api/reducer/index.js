@@ -47,15 +47,25 @@ function reducer(state, action) {
       return {
         ...state, lanceAtual: action.lanceAtual
       }
-
     case actions.getAcoesUser:
       return {
         ...state, acoesUsuario: action.data
       }
-      case actions.vendeuAcoes:
-        return {
-          ...state, vendeuAcao: true,lanceAtual:null,lances:null
+    case actions.getSaldo:
+      return {
+        ...state, saldo: action.saldo
+      }
+    case actions.getTemporalAcao:
+      return {
+        ...state, temporal: {
+          ...state.temporal,
+          [action.codigo]: action.data
         }
+      }
+    case actions.vendeuAcoes:
+      return {
+        ...state, vendeuAcao: true, lanceAtual: null, lances: null
+      }
     default:
       return state
   }

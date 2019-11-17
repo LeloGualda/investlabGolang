@@ -37,7 +37,7 @@ func insertCompra(userCompra, codigo string, valor float64, qtd int) error {
 			err := errors.New("usuario de compra não encontrado")
 			return err
 		}
-		saldo := queryGetSaldo(transCompra.ID)
+		saldo := queryGetSaldo(transCompra.ID).Valor
 
 		if saldo < valor {
 			err := errors.New("sem saldo")

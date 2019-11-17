@@ -20,13 +20,13 @@ class App extends Component {
     render() {
         const { seriesCompra = [] } = this.props
         return <Container>
-            <Row>
+            <Row className="board-cards">
                 <Col>
                     {seriesCompra.map(item => <Row key={item.codigo}>
                         <Card border="secondary Cardcompra" onDoubleClick={() => this.routeChange(item.codigo)} style={{ width: '18rem' }} >
                             <Card.Header>{item.codigo}</Card.Header>
                             <Card.Body>
-                            <Card.Title> valor: {item.valor} </Card.Title>
+                            <Card.Title> VALOR: {item.valor} </Card.Title>
                                 <Card.Text>
                                     {item.data}
                                 </Card.Text>

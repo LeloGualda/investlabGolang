@@ -10,7 +10,9 @@ export default class Confirm extends Component {
                 <Modal.Title>{title}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <p>{body}</p>
+                <p>
+                <div dangerouslySetInnerHTML={{__html:body}} />
+                </p>
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={close}>Sair</Button>

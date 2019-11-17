@@ -1,0 +1,35 @@
+---
+
+- hosts: aws
+  become: yes
+
+  tasks:
+  - set_fact:
+    ansible_facts:
+      pkg_mgr: yum
+
+  - name: 'Copy build'
+    copy:
+      src: '/projects/go/src/investlab/bin'
+      dest: '/opt/investlab/'
+    become: yes
+
+  # - name: Download sources Mysql
+  #   get_url:
+  #     url: http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm
+  #     dest: /opt/mysql
+
+  # - name: Install glusterfs-server package
+  #   dnf:
+  #     name: glusterfs-server
+  #     state: installed
+
+  # - set_fact:
+  #   ansible_facts:
+  #     pkg_mgr: yum
+
+  # - name: Install Package Mysql
+  #   become: yes
+  #   dnf:
+  #     name: /opt/mysql/mysql-community-release-el7-5.noarch.rpm
+  #     state: present

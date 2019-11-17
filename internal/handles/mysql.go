@@ -3,7 +3,6 @@ package handles
 import (
 	"database/sql"
 	"fmt"
-	"strconv"
 
 	_ "github.com/go-sql-driver/mysql"
 	"golang.org/x/crypto/bcrypt"
@@ -28,14 +27,6 @@ type Carteira struct {
 	Lance  int    `json:"lance", db:"lance"`
 }
 
-type Transacao struct {
-	ID        int     `json:"id", db:"id_transacao"`
-	Data      string  `json:"data", db:"data"`
-	Valor     float64 `json:"valor", db:"valor"`
-	Tipo      int     `json:"tipo", db:"tipo"`
-	Descricao string  `json:"descricao", db:"descricao"`
-}
-
 type TransacaoCompra struct {
 	Codigo      string  `json:"codigo", db:"codigo"`
 	Data        string  `json:"data", db:"data"`
@@ -49,13 +40,6 @@ type Lances struct {
 	Codigo string  `json:"codigo", db:"codigo"`
 	Valor  float64 `json:"valor", db:"valor"`
 	Qtd    int     `json:"qtd", db:"qtd"`
-}
-
-type AcoesDoUsuario struct {
-	Codigo string `json:"codigo", db:"codigo"`
-	Lance  int    `json:"lance", db:"lance"`
-	Qtd    int    `json:"qtd", db:"qtd"`
-	Venda  bool   `json:"venda", db:"venda"`
 }
 
 type CarteiraUser struct {
@@ -76,21 +60,12 @@ func Connection(mysqlCon string) {
 
 func queryGetUseID(username string) int {
 	u := &User{}
-	err := db.QueryRow("SELECT id_user FROM mydb.usuario WHERE username = ?", username).Scan(&u.ID)
+	err := db.QueryRow("SELECT id_user FROM usuario WHERE username = ?", username).Scan(&u.ID)
 	if err != nil {
 		fmt.Println(err.Error())
 		return -1
 	}
 	return u.ID
-}
-
-func queryGetSaldo(id_user int) float64 {
-	u := &Transacao{}
-	err := db.QueryRow("select sum(valor) from mydb.transacao where id_user = ?", id_user).Scan(&u.Valor)
-	if err != nil {
-		fmt.Println(err.Error())
-	}
-	return u.Valor
 }
 
 func queryGetPassword(cred Credentials) (password string, err error) {
@@ -102,45 +77,45 @@ func queryGetPassword(cred Credentials) (password string, err error) {
 	return
 }
 
-func queryGetAcoes() []ApiAcao {
-	var apis = []ApiAcao{}
+// func queryGetAcoes() []ApiAcao {
+// 	var apis = []ApiAcao{}
 
-	query := "select * from acoes"
-	rows, _ := db.Query(query)
+// 	query := "select * from acoes"
+// 	rows, _ := db.Query(query)
 
-	for rows.Next() {
-		api := &ApiAcao{}
-		rows.Scan(&api.Codigo, &api.Name, &api.Region, &api.Type, &api.Currency)
-		apis = append(apis, *api)
-	}
+// 	for rows.Next() {
+// 		api := &ApiAcao{}
+// 		rows.Scan(&api.Codigo, &api.Name, &api.Region, &api.Type, &api.Currency)
+// 		apis = append(apis, *api)
+// 	}
 
-	return apis
-}
+// 	return apis
+// }
 
-func insertAcao(acao ApiAcao) {
-	query := "INSERT INTO mydb.acoes (codigo,nome,regiao,tipo,moeda) VALUES (?,?,?,?,?);"
-	_, err := db.Query(query, acao.Codigo, acao.Name, acao.Region, acao.Type, acao.Currency)
-	if err != nil {
-		fmt.Println(err.Error())
-	}
-}
+// func insertAcao(acao ApiAcao) {
+// 	query := "INSERT INTO acoes (codigo,nome,regiao,tipo,moeda) VALUES (?,?,?,?,?);"
+// 	_, err := db.Query(query, acao.Codigo, acao.Name, acao.Region, acao.Type, acao.Currency)
+// 	if err != nil {
+// 		fmt.Println(err.Error())
+// 	}
+// }
 
 func insertCarteira(carteira Carteira) {
-	query := "INSERT INTO mydb.carteira (id_user,codigo,venda,lance) VALUES (?,?,?,?);"
+	query := "INSERT INTO carteira (id_user,codigo,venda,lance) VALUES (?,?,?,?);"
 	_, err := db.Query(query, carteira.ID, carteira.Codigo, carteira.Venda, carteira.Lance)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
 }
 
-func insertValorAcao(valor BaseValores) {
-	query := "INSERT INTO mydb.valores (codigo,data,valor) VALUES (?,?,?);"
+// func insertValorAcao(valor BaseValores) {
+// 	query := "INSERT INTO valores (codigo,data,valor) VALUES (?,?,?);"
 
-	_, err := db.Query(query, valor.Codigo, valor.Date, valor.Valor)
-	if err != nil {
-		fmt.Println(err.Error())
-	}
-}
+// 	_, err := db.Query(query, valor.Codigo, valor.Date, valor.Valor)
+// 	if err != nil {
+// 		fmt.Println(err.Error())
+// 	}
+// }
 
 func insertTransacao(trans Transacao) {
 	query := "INSERT INTO transacao(data,valor,id_user,tipo,descricao) VALUES (?,?,?,?,?);"
@@ -160,7 +135,7 @@ func insertTransacao(trans Transacao) {
 
 func createUser(creds Credentials) error {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(creds.Password), 8)
-	query := "insert into mydb.usuario (username,password) values ('" + creds.Username + "','" + string(hashedPassword) + "')"
+	query := "insert into usuario (username,password) values ('" + creds.Username + "','" + string(hashedPassword) + "')"
 	_, err = db.Query(query)
 	return err
 }
@@ -176,17 +151,17 @@ func queryGetTransCompra(idAcao int) TransacaoCompra {
 	transC := &TransacaoCompra{}
 	query := `
 
-	select mydb.valores.data,
-		   mydb.valores.valor,
-		   mydb.carteira.lance,
-		   mydb.valores.codigo,
-		   mydb.carteira.id_user,
-		   mydb.valores.valor + (mydb.valores.valor *  (mydb.carteira.lance/100)) as valorVenda
+	select valores.data,
+		   valores.valor,
+		   carteira.lance,
+		   valores.codigo,
+		   carteira.id_user,
+		   valores.valor + (valores.valor *  (carteira.lance/100)) as valorVenda
 
-		from mydb.valores,mydb.carteira
-			where mydb.valores.codigo =  mydb.carteira.codigo
+		from valores,carteira
+			where valores.codigo =  carteira.codigo
 			and
-			data = (select max(data) from mydb.valores)
+			data = (select max(data) from valores)
 			and
 			carteira.id_carteira = ?`
 
@@ -201,41 +176,12 @@ func queryGetTransCompra(idAcao int) TransacaoCompra {
 	return *transC
 }
 
-func queryGetCompraAcoes() []BaseValores {
-
-	query := `
-	select
-	data,
-	valor,
-	codigo
-	from mydb.valores
-		where
-	data = (select max(data) from mydb.valores group by codigo);
-`
-
-	var valores = []BaseValores{}
-
-	rows, err := db.Query(query)
-	if err != nil {
-		fmt.Println(err.Error())
-	}
-
-	for rows.Next() {
-		valor := &BaseValores{}
-
-		rows.Scan(&valor.Date, &valor.Valor, &valor.Codigo)
-
-		valores = append(valores, *valor)
-	}
-	return valores
-}
-
 func removeCarteira(id int) {
-	db.Query("DELETE FROM mydb.carteira WHERE mydb.carteira.id_carteira = ?;", id)
+	db.Query("DELETE FROM carteira WHERE carteira.id_carteira = ?;", id)
 
 }
 
-func queryGetLancesAcao(codigo string) []Lances {
+func queryGetLancesAcao(codigo string, id_user int) []Lances {
 
 	query := `
 	select
@@ -244,22 +190,24 @@ func queryGetLancesAcao(codigo string) []Lances {
 	count(lance) as qtd,
 	valor + (valor *  (lance/100)) as valor
 	
-	from (select  
-		   mydb.carteira.codigo,
-		   mydb.carteira.lance,
-		   mydb.valores.valor
-		   from mydb.carteira,mydb.valores
-			   where 
-				   venda = true 
-				   and 
-				  mydb.valores.codigo = mydb.carteira.codigo
-						   and 
-				   mydb.valores.data = (select max(data) from mydb.valores group by codigo)) as a
+	from (select
+		   carteira.codigo,
+		   carteira.lance,
+		   valores.valor
+		   from carteira,valores
+			   where
+				   venda = true
+				   and
+                   carteira.id_user != ?
+				   and
+				  valores.codigo = carteira.codigo
+						   and
+				   valores.data = (select max(data) from valores group by codigo)) as a
 				   where codigo = "` + codigo + `"group by codigo,lance,valor order by lance, qtd desc;`
 
 	var lances = []Lances{}
 
-	rows, err := db.Query(query)
+	rows, err := db.Query(query, id_user)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
@@ -278,17 +226,17 @@ func queryGetCarteiraUser(codigo string, valor float64) []CarteiraUser {
 
 	query := `
 	select  
-		mydb.carteira.id_carteira,
-        mydb.carteira.id_user
-		from mydb.carteira,mydb.valores
+		carteira.id_carteira,
+        carteira.id_user
+		from carteira,valores
 			where
 				venda = true
                 and
 				valor + (valor *  (lance/100)) = "` + fmt.Sprintf("%f", valor) + `"
 			   and
-			   mydb.carteira.codigo = '` + codigo + `'
+			   carteira.codigo = '` + codigo + `'
 		       and
-				mydb.valores.data = (select max(data) from mydb.valores group by codigo);
+				valores.data = (select max(data) from valores group by codigo);
 	`
 
 	var carts = []CarteiraUser{}
@@ -309,53 +257,14 @@ func queryGetCarteiraUser(codigo string, valor float64) []CarteiraUser {
 	return carts
 }
 
-func queryGetAcoesUsuario(id int) []AcoesDoUsuario {
-
-	query := `
-	select codigo,
-	venda,
-	lance,
-	count(codigo)  as qtd 
-	from	(select  
-			mydb.carteira.id_carteira,
-			mydb.carteira.id_user,
-			mydb.carteira.codigo,
-			mydb.carteira.venda,
-			mydb.carteira.lance
-			from mydb.carteira,mydb.valores
-				where
-					mydb.carteira.id_user = ` + strconv.Itoa(id) + `
-						and 
-					mydb.valores.data = (select max(data) from mydb.valores group by codigo)) as a
-						group by codigo,venda,lance;
-	`
-
-	var acoes = []AcoesDoUsuario{}
-
-	rows, err := db.Query(query)
-
-	if err != nil {
-		fmt.Println(err.Error())
-	}
-
-	for rows.Next() {
-		acao := &AcoesDoUsuario{}
-
-		rows.Scan(&acao.Codigo, &acao.Venda, &acao.Lance, &acao.Qtd)
-
-		acoes = append(acoes, *acao)
-	}
-	return acoes
-}
-
-// SELECT id_user,lance,codigo FROM mydb.carteira where  mydb.carteira.id_carteira  = 1;
+// SELECT id_user,lance,codigo FROM carteira where  carteira.id_carteira  = 1;
 // select data,valor,codigo
-// from mydb.valores
-// 	where data = (select max(data) from mydb.valores group by codigo);
+// from valores
+// 	where data = (select max(data) from valores group by codigo);
 
 // select data,valor,codigo
-// from mydb.valores
+// from valores
 // 	where
-// 		data = (select max(data) from mydb.valores)
+// 		data = (select max(data) from valores)
 // 		and
-// 		codigo = (SELECT codigo FROM mydb.carteira where  mydb.carteira.id_carteira  = 1);
+// 		codigo = (SELECT codigo FROM carteira where  carteira.id_carteira  = 1);
