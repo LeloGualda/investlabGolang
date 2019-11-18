@@ -31,6 +31,7 @@ export default {
     vendeuAcoes: "VENDEU_ACOES",
     getSaldo: "GET_SALDO_USER",
     getTemporalAcao:"GET_TEMPORAL_ACAO",
+    buscaApi:"SEARCH_API",
     initialState: {
         api,
         newclient,
@@ -42,6 +43,7 @@ export default {
         erros: {
             auth: null
         },
+        buscaAcoes:{},
         temporal:{},
         saldo: 0,
         active: false,

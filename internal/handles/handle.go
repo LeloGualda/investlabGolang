@@ -25,7 +25,11 @@ func Api(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 
-			adminSerachAPI(w, r, keyword[0])
+			adminSearchAPI(w, r, keyword[0])
+		}
+
+		if strings.HasPrefix(sid, "addCarteira/") {
+
 		}
 
 	}

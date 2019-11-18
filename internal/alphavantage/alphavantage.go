@@ -49,7 +49,6 @@ func requestApi(param string) []byte {
 	return nil
 }
 func GetAPi(keyword string, createTimeLine bool) structs.ApiPesquisa {
-
 	param := "query?function=SYMBOL_SEARCH&keywords=" + keyword + "&apikey=" + key
 	body := requestApi(param)
 

@@ -4,6 +4,8 @@ import {connect} from 'react-redux'
 import Login from './components/login'
 import logout from './api/reducer/actions/logout'
 import Usuarios from './pages/usuarios'
+import Acoes from './pages/acoes'
+
 
 class Router extends Component {
   render() {
@@ -13,6 +15,7 @@ class Router extends Component {
           active ? <Switch>
           <Route exact path="/admin" component={() => <h1>AREA DO ADMIN {user.username} </h1>} />
           <Route exact path="/admin/usuarios" component={() => <Usuarios/>} />
+          <Route exact path="/admin/acoes" component={() => <Acoes/>} />
           <Route exact path="/logout" component={() => { this.props.logout(); return <Redirect to="/" /> }} />
           <Route path="*" component={() => <h1>Page not found</h1>} />
           </Switch> : <Login/>
