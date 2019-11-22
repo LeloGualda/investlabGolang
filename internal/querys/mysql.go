@@ -62,13 +62,28 @@ func QueryGetAcoes() []structs.ApiAcao {
 	return apis
 }
 
+func QueryGetAcoesEspecifica(codigo string) []structs.ApiAcao {
+	var apis = []structs.ApiAcao{}
+
+	query := "select * from acoes where codigo = ?"
+	rows, _ := db.Query(query, codigo)
+
+	for rows.Next() {
+		api := &structs.ApiAcao{}
+		rows.Scan(&api.Codigo, &api.Name, &api.Region, &api.Type, &api.Currency)
+		apis = append(apis, *api)
+	}
+
+	return apis
+}
+
 func InsertTransacao(trans structs.Transacao) {
 	query := "INSERT INTO transacao(data,valor,id_user,tipo,descricao) VALUES (?,?,?,?,?);"
 
 	date := ""
 
 	if trans.Data == "" {
-		date = "2019-09-08"
+		date = newDate()
 	} else {
 		date = trans.Data
 	}

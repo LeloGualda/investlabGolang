@@ -15,9 +15,12 @@ func QueryGetCompraAcoes() []BaseValores {
 	data,
 	valor,
 	codigo
-	from mydb.valores
+	from mydb.valores as a
 		where
-	data = (select max(data) from mydb.valores group by codigo);
+	data = (select max(data) from valores as b
+    where b.codigo = a.codigo
+    group by codigo);
+
 `
 
 	var valores = []BaseValores{}

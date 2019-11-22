@@ -13,8 +13,8 @@ func QueryGetAcoesUsuario(id int) []structs.AcoesDoUsuario {
 	select codigo,
 	venda,
 	lance,
-	count(codigo)  as qtd 
-	from	(select  
+	count(codigo)  as qtd
+	from	(select
 			mydb.carteira.id_carteira,
 			mydb.carteira.id_user,
 			mydb.carteira.codigo,
@@ -23,8 +23,11 @@ func QueryGetAcoesUsuario(id int) []structs.AcoesDoUsuario {
 			from mydb.carteira,mydb.valores
 				where
 					mydb.carteira.id_user = ` + strconv.Itoa(id) + `
-						and 
-					mydb.valores.data = (select max(data) from mydb.valores group by codigo)) as a
+						and
+					mydb.valores.data = (select max(data) from valores
+											where
+												valores.codigo = carteira.codigo
+											group by codigo)) as a
 						group by codigo,venda,lance;
 	`
 

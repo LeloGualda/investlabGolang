@@ -92,37 +92,32 @@ func InserirSeriesAPI(codigo string) {
 // 	}
 // }
 
-func createBot() {
+func CreateUserBoot() {
+	querys.CreateUser(getUserBoot())
+}
+func getUserBoot() structs.Credentials {
+	creds := new(structs.Credentials)
+	creds.Username = "BOT"
+	creds.Password = "GhJ8Y!z0%qDPkyLb"
+	return *creds
+}
 
-	// api := queryGetAcoes()
+func AddAcaoBot(codigo string) {
 
-	// fmt.Println("get all acoes")
-	// //getAPi("MSFT", true)
+	api := querys.QueryGetAcoesEspecifica(codigo)
 
-	// for _, el := range api {
-	// 	fmt.Println(el.Codigo)
-	// 	creds := new(Credentials)
-	// 	creds.Password = el.Codigo
-	// 	creds.Username = el.Codigo
-	// 	err := createUser(*creds)
+	for _, el := range api {
+		add := randAdd()
+		for i := 0; i < add; i++ {
+			carteira := new(structs.Carteira)
+			carteira.Codigo = el.Codigo
+			carteira.ID = querys.QueryGetUseID("BOT")
+			carteira.Lance = randLance()
+			carteira.Venda = true
+			querys.InsertCarteira(*carteira)
+		}
 
-	// 	fmt.Println("create user")
-
-	// 	if err != nil {
-	// 		fmt.Println(err.Error())
-	// 	}
-	// 	add := randAdd()
-
-	// 	for i := 0; i < add; i++ {
-	// 		carteira := new(Carteira)
-	// 		carteira.Codigo = el.Codigo
-	// 		carteira.ID = queryGetUseID(creds.Username)
-	// 		carteira.Lance = randLance()
-	// 		carteira.Venda = true
-	// 		insertCarteira(*carteira)
-	// 	}
-
-	// }
+	}
 }
 
 func randLance() int {

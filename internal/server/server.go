@@ -21,8 +21,10 @@ func log(h http.Handler) http.Handler {
 func serveTemplate(w http.ResponseWriter, r *http.Request) {
 
 	staticRouter := "./bin/web/static"
-	lp := filepath.Join(staticRouter, "admin.html")
 	fp := filepath.Join(staticRouter, filepath.Clean(r.URL.Path))
+	// lp := filepath.Join(staticRouter, "admin.html")
+	lp := filepath.Join(staticRouter, "index.html")
+
 	// fp
 	// fmt.Println(lp)
 	// fmt.Println(fp)
@@ -54,10 +56,15 @@ func serveTemplate(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("response: " + lp)
 	fmt.Println("response: " + fp)
 
-	if err := tmpl.ExecuteTemplate(w, "admin.html", nil); err != nil {
+	if err := tmpl.ExecuteTemplate(w, "index.html", nil); err != nil {
 		fmt.Println("54:" + err.Error())
 		http.Error(w, http.StatusText(500), 500)
 	}
+
+	// if err := tmpl.ExecuteTemplate(w, "admin.html", nil); err != nil {
+	// 	fmt.Println("54:" + err.Error())
+	// 	http.Error(w, http.StatusText(500), 500)
+	// }
 
 }
 
@@ -73,7 +80,7 @@ func Start() {
 	querys.Connection(*mysqlCon)
 
 	fmt.Println("Starting server...")
-
+	// alphavantage.CreateUserBoot()
 	http.HandleFunc("/session", handles.NewSesseion)
 	http.HandleFunc("/test", handles.Test)
 	http.HandleFunc("/api/", handles.Api)

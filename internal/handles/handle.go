@@ -24,14 +24,40 @@ func Api(w http.ResponseWriter, r *http.Request) {
 				fmt.Println("Url Param 'keyword' is missing")
 				return
 			}
-
 			adminSearchAPI(w, r, keyword[0])
 		}
 
 		if strings.HasPrefix(sid, "addCarteira/") {
 
+			codigo, ok := getParamUrl(r, "codigo")
+			if !ok {
+				return
+			}
+			nome, ok := getParamUrl(r, "nome")
+			if !ok {
+				return
+			}
+			tipo, ok := getParamUrl(r, "tipo")
+			if !ok {
+				return
+			}
+			fmt.Printf("addCarteira: " + codigo)
+			adminAddAcao(w, r, codigo, nome, tipo)
 		}
 
+		if strings.HasPrefix(sid, "updateSeries/") {
+			sid = strings.TrimPrefix(sid, "updateSeries/")
+			fmt.Printf("upddate series: " + sid)
+
+			updateSeries(sid)
+		}
+
+		if strings.HasPrefix(sid, "ativarAcao/") {
+
+			sid = strings.TrimPrefix(sid, "ativarAcao/")
+			fmt.Printf("ativar acao" + sid)
+			ativarAcao(sid)
+		}
 	}
 
 	if strings.HasPrefix(sid, "comprar") {
@@ -54,6 +80,7 @@ func Api(w http.ResponseWriter, r *http.Request) {
 
 	if strings.HasPrefix(sid, "acoes") {
 		if sid == "acoes" {
+			fmt.Println("get acoes")
 			getAcoes(w, r, user.ID)
 			return
 		}
@@ -140,4 +167,18 @@ func Api(w http.ResponseWriter, r *http.Request) {
 		}
 		venderAcao(w, r, v, codigo, user.Username, i)
 	}
+}
+
+func getParamUrl(r *http.Request, name string) (param string, res bool) {
+	codigo, ok := r.URL.Query()[name]
+	if !ok || len(codigo[0]) < 1 {
+		// fmt.Println("Url Param 'codigo' is missing")
+		param = ""
+		res = false
+	} else {
+
+		param = codigo[0]
+		res = true
+	}
+	return param, res
 }
