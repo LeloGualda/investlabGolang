@@ -8,7 +8,7 @@ import (
 )
 
 func Api(w http.ResponseWriter, r *http.Request) {
-	auth, user := checkUser(r)
+	auth, user := CheckUser(r)
 	if !auth {
 		w.WriteHeader(http.StatusUnauthorized)
 		return
@@ -18,6 +18,10 @@ func Api(w http.ResponseWriter, r *http.Request) {
 
 	if strings.HasPrefix(sid, "admin") {
 		sid = strings.TrimPrefix(sid, "admin/")
+
+		if strings.HasPrefix(sid, "users") {
+			getUsers(w, r)
+		}
 		if strings.HasPrefix(sid, "search/") {
 			keyword, ok := r.URL.Query()["keyword"]
 			if !ok || len(keyword[0]) < 1 {

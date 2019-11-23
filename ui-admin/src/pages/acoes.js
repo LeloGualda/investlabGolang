@@ -10,6 +10,9 @@ import Button from 'react-bootstrap/Button'
 
 import comprar from '../api/reducer/actions/comprar'
 import buscarAcoes from '../api/reducer/actions/search'
+import addAcao from '../api/reducer/actions/addAcao'
+import atualizarAcao from '../api/reducer/actions/atualizarAcao'
+import ativarAcao from '../api/reducer/actions/ativarAcao'
 
 class Acoes extends Component {
     constructor(props) {
@@ -61,16 +64,23 @@ class Acoes extends Component {
                                 <th>
                                     NOME
                                 </th>
-                                <th>
-                                    ADICIONAR
-                                </th>
+                                
                             </tr>
                         </thead>
                         <tbody>
                             {BestMatches.map(acao => <tr key={acao['1. symbol']}>
                                 <td>{acao['1. symbol']}</td>
                                 <td>{acao['2. name']}</td>
-                                <td><Button> add</Button></td>
+                                <td>
+                                <Button onClick={() => {
+                                    this.props.addAcao({
+                                        name:acao['2. name'],
+                                        codigo:acao['1. symbol'],
+                                        tipo:acao['3. type']
+                                     })
+                                    setTimeout(()=>this.props.comprar() ,3000)
+                                    }}> add</Button></td>
+
                             </tr>)}
                         </tbody>
                     </Table>
@@ -88,12 +98,31 @@ class Acoes extends Component {
                                 <th>
                                     ULTIMA ATUALIZAÇÃO
                                 </th>
+                                <th>
+                                    ATUALIZAR
+                                </th>
+                                <th>
+                                DISTRIBUIR AÇÃO
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
                             {seriesCompra.map(({codigo, data}) => <tr key={codigo}>
                                 <td>{codigo}</td>
                                 <td>{data}</td>
+                                <td>
+                                <Button onClick={() => {
+                                    this.props.atualizarAcao(codigo)
+                                    setTimeout(()=>this.props.comprar() ,3000)
+                                    }}>
+                                ATUALIZAR
+                                </Button>
+                                </td>
+                                     <td>
+                                <Button onClick={() => {
+                                    this.props.ativarAcao(codigo)
+                                    }}> ATIVAR COMPRA</Button></td>
+                                     
                             </tr>)}
                         </tbody>
                     </Table>
@@ -103,4 +132,4 @@ class Acoes extends Component {
     }
 }
 
-export default connect(({seriesCompra, buscaAcoes}) => ({seriesCompra, acoes: buscaAcoes}), {comprar, buscarAcoes})(Acoes)
+export default connect(({seriesCompra, buscaAcoes}) => ({seriesCompra, acoes: buscaAcoes}), {comprar, ativarAcao,buscarAcoes,atualizarAcao,addAcao})(Acoes)

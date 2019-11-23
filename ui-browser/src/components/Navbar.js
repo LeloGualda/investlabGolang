@@ -18,7 +18,7 @@ class App extends Component {
                         <Navbar.Brand href="/" style={{ color: 'white', textTransform: 'uppercase' }}>{user.username}</Navbar.Brand>
                         <Nav.Link href="/comprar">Compra</Nav.Link>
                         <Nav.Link href="/vender">Vender</Nav.Link>
-                        <Nav.Link href="/graficos">Gráficos</Nav.Link>
+                        {/* <Nav.Link href="/graficos">Gráficos</Nav.Link> */}
                     </Nav>
                     <Nav className="justify-content-center" style={{ width: '100%', textAlign: 'center' }}>
                         <Nav.Item>

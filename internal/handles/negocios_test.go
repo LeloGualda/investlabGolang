@@ -1,9 +1,10 @@
 package handles
 
-// import (
-// 	"fmt"
-// 	"testing"
-// )
+import (
+	"testing"
+
+	"../querys"
+)
 
 // func TestInsertDinheiro(t *testing.T) {
 // 	Connection("root:123456@/mydb")
@@ -45,7 +46,7 @@ package handles
 // 	}
 // }
 
-// func TestRemoveAcao(t *testing.T) {
-// 	Connection("root:123456@/mydb")
-// 	removeCarteira(1)
-// }
+func TestRemoveAcao(t *testing.T) {
+	querys.Connection("root:123456@/mydb")
+	insertCompra("aurelio", "MSFT.MEX", 3211, 1)
+}

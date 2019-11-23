@@ -80,13 +80,14 @@ func QueryGetAcoesEspecifica(codigo string) []structs.ApiAcao {
 func InsertTransacao(trans structs.Transacao) {
 	query := "INSERT INTO transacao(data,valor,id_user,tipo,descricao) VALUES (?,?,?,?,?);"
 
-	date := ""
+	date := "2019-11-22"
 
-	if trans.Data == "" {
-		date = newDate()
-	} else {
-		date = trans.Data
-	}
+	// if trans.Data == "" {
+	// 	date = strings.Replace(newDate(), "/", "-", 3)
+	// } else {
+	// 	date = trans.Data
+	// }
+
 	_, err := db.Query(query, date, trans.Valor, trans.ID, trans.Tipo, trans.Descricao)
 	if err != nil {
 		fmt.Println(err.Error())
@@ -117,7 +118,7 @@ func QueryGetTransCompra(idAcao int) structs.TransacaoCompra {
 		   carteira.lance,
 		   valores.codigo,
 		   carteira.id_user,
-		   valores.valor + (valores.valor *  (carteira.lance/100)) as valorVenda
+		   ROUND(valores.valor + (valores.valor *  (carteira.lance/100)),2) as valorVenda
 
 		from valores,carteira
 			where valores.codigo =  carteira.codigo
@@ -149,7 +150,7 @@ func QueryGetLancesAcao(codigo string, id_user int) []structs.Lances {
 
 	codigo,
 	count(lance) as qtd,
-	valor + (valor *  (lance/100)) as valor
+	ROUND(valor + (valor *  (lance/100)),2) as valor
 	
 	from (select
 		   carteira.codigo,
@@ -163,8 +164,9 @@ func QueryGetLancesAcao(codigo string, id_user int) []structs.Lances {
 				   and
 				  valores.codigo = carteira.codigo
 						   and
-				   valores.data = (select max(data) from valores group by codigo)) as a
-				   where codigo = "` + codigo + `"group by codigo,lance,valor order by lance, qtd desc;`
+				   valores.data = (select max(data) from valores where codigo = "` + codigo + `" group by codigo)) as a
+				   where codigo = "` + codigo + `"group by codigo,lance,valor order by lance, qtd desc;
+`
 
 	var lances = []structs.Lances{}
 
@@ -193,13 +195,15 @@ func QueryGetCarteiraUser(codigo string, valor float64) []structs.CarteiraUser {
 			where
 				venda = true
                 and
-				valor + (valor *  (lance/100)) = "` + fmt.Sprintf("%f", valor) + `"
+				ROUND(valor + (valor *  (lance/100)),2)  = "` + fmt.Sprintf("%.2f", valor) + `"
 			   and
 			   carteira.codigo = '` + codigo + `'
 		       and
-				valores.data = (select max(data) from valores group by codigo);
+				valores.data = (select max(data) from valores as a
+					where a.codigo = '` + codigo + `'
+				group by codigo);
 	`
-
+	fmt.Println(query)
 	var carts = []structs.CarteiraUser{}
 
 	rows, err := db.Query(query)
@@ -215,6 +219,7 @@ func QueryGetCarteiraUser(codigo string, valor float64) []structs.CarteiraUser {
 
 		carts = append(carts, *car)
 	}
+	fmt.Println("fez a query")
 	return carts
 }
 

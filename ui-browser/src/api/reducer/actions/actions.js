@@ -31,6 +31,7 @@ export default {
     vendeuAcoes: "VENDEU_ACOES",
     getSaldo: "GET_SALDO_USER",
     getTemporalAcao:"GET_TEMPORAL_ACAO",
+    getUser:'GET_USER',
     initialState: {
         api,
         newclient,

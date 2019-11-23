@@ -9,7 +9,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func checkUser(r *http.Request) (valid bool, userOb structs.User) {
+func CheckUser(r *http.Request) (valid bool, userOb structs.User) {
 	user, pass, _ := r.BasicAuth()
 
 	cred := structs.Credentials{

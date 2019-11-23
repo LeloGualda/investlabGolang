@@ -6,7 +6,9 @@ import (
 	"html/template"
 	"net/http"
 	"path/filepath"
+	"strings"
 
+	"../alphavantage"
 	"../handles"
 	"../querys"
 )
@@ -21,50 +23,43 @@ func log(h http.Handler) http.Handler {
 func serveTemplate(w http.ResponseWriter, r *http.Request) {
 
 	staticRouter := "./bin/web/static"
-	fp := filepath.Join(staticRouter, filepath.Clean(r.URL.Path))
-	// lp := filepath.Join(staticRouter, "admin.html")
-	lp := filepath.Join(staticRouter, "index.html")
+	// s := strings.sta(r.URL.Path, "/admin")
+	// _, user := handles.CheckUser(r)
 
-	// fp
-	// fmt.Println(lp)
-	// fmt.Println(fp)
-	// // // Return a 404 if the template doesn't exist
-	// _, err := os.Stat(fp)
-	// if err != nil {
-	// 	if os.IsNotExist(err) {
-	// 		fmt.Println("31:" + err.Error())
-	// 		http.NotFound(w, r)
-	// 		return
-	// 	}
-	// }
-	// http.ServeFile(w, r, lp)
-	// // Return a 404 if the request is for a directory
-	// if info.IsDir() {
-	// 	fmt.Println("39:" + err.Error())
-	// 	http.NotFound(w, r)
-	// 	return
-	// }
+	// fmt.Println("USER NAME")
+	// fmt.Println(r.URL.Path)
+	// fmt.Println(user.ID)
 
-	tmpl, err := template.ParseFiles(lp)
-	if err != nil {
-		fmt.Println("46:" + err.Error())
-		// Log the detailed error
-		// Return a generic "Internal Server Error" message
-		http.Error(w, http.StatusText(500), 500)
-		return
+	if strings.HasPrefix(r.URL.Path, "/admin") {
+		lp := filepath.Join(staticRouter, "admin.html")
+
+		tmpl, err := template.ParseFiles(lp)
+		if err != nil {
+			fmt.Println("46:" + err.Error())
+			http.Error(w, http.StatusText(500), 500)
+			return
+		}
+
+		if err := tmpl.ExecuteTemplate(w, "admin.html", nil); err != nil {
+			fmt.Println("54:" + err.Error())
+			http.Error(w, http.StatusText(500), 500)
+		}
+	} else {
+
+		lp := filepath.Join(staticRouter, "index.html")
+
+		tmpl, err := template.ParseFiles(lp)
+		if err != nil {
+			fmt.Println("46:" + err.Error())
+			http.Error(w, http.StatusText(500), 500)
+			return
+		}
+
+		if err := tmpl.ExecuteTemplate(w, "index.html", nil); err != nil {
+			fmt.Println("54:" + err.Error())
+			http.Error(w, http.StatusText(500), 500)
+		}
 	}
-	fmt.Println("response: " + lp)
-	fmt.Println("response: " + fp)
-
-	if err := tmpl.ExecuteTemplate(w, "index.html", nil); err != nil {
-		fmt.Println("54:" + err.Error())
-		http.Error(w, http.StatusText(500), 500)
-	}
-
-	// if err := tmpl.ExecuteTemplate(w, "admin.html", nil); err != nil {
-	// 	fmt.Println("54:" + err.Error())
-	// 	http.Error(w, http.StatusText(500), 500)
-	// }
 
 }
 
@@ -80,7 +75,8 @@ func Start() {
 	querys.Connection(*mysqlCon)
 
 	fmt.Println("Starting server...")
-	// alphavantage.CreateUserBoot()
+	alphavantage.CreateUserBoot()
+	alphavantage.CreateUserAdmin()
 	http.HandleFunc("/session", handles.NewSesseion)
 	http.HandleFunc("/test", handles.Test)
 	http.HandleFunc("/api/", handles.Api)

@@ -66,6 +66,12 @@ function reducer(state, action) {
       return {
         ...state, vendeuAcao: true, lanceAtual: null, lances: null
       }
+
+    case actions.getUser:
+      return {
+        ...state, users:action.data
+      }
+  
     default:
       return state
   }

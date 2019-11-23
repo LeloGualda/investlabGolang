@@ -27,4 +27,11 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err.Error())
 		w.WriteHeader(http.StatusInternalServerError)
 	}
+	transVenda := new(structs.Transacao)
+	transVenda.ID = querys.QueryGetUseID(creds.Username)
+	transVenda.Tipo = 1
+	transVenda.Valor = 200000
+	transVenda.Descricao = "deposito inicial"
+	querys.InsertTransacao(*transVenda)
+
 }

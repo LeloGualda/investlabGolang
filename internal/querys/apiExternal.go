@@ -15,6 +15,7 @@ func InsertAcao(acao structs.ApiAcao) {
 }
 
 func InsertCarteira(carteira structs.Carteira) {
+	// fmt.Println(carteira.Codigo,)
 	query := "INSERT INTO carteira (id_user,codigo,venda,lance) VALUES (?,?,?,?);"
 	_, err := db.Query(query, carteira.ID, carteira.Codigo, carteira.Venda, carteira.Lance)
 	if err != nil {

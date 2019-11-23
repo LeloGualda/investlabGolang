@@ -39,7 +39,7 @@ CREATE TABLE `acoes` (
 
 LOCK TABLES `acoes` WRITE;
 /*!40000 ALTER TABLE `acoes` DISABLE KEYS */;
-INSERT INTO `acoes` VALUES ('ITSA4.SAO','Itausa - Investimentos Itau S.A.','','Equity',''),('MSFT.MEX','Microsoft Corporation','','Equity','');
+INSERT INTO `acoes` VALUES ('BBD','Banco Bradesco S.A.','','Equity',''),('BBDC4.SAO','Banco Bradesco S.A.','','Equity',''),('BOVA11.SAO','iShares Ibovespa Fundo de Índice ETF','','Equity',''),('ITSA4.SAO','Itausa - Investimentos Itau S.A.','','Equity',''),('JFSSX','Test Mutual Fund - JFSS','','Mutual Fund',''),('MSFT.MEX','Microsoft Corporation','','Equity',''),('TESTJ','undefined','','Equity','');
 /*!40000 ALTER TABLE `acoes` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -52,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-11-21 19:17:40
+-- Dump completed on 2019-11-22 19:59:22

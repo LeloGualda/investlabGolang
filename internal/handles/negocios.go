@@ -2,6 +2,7 @@ package handles
 
 import (
 	"errors"
+	"fmt"
 
 	"../querys"
 	"../structs"
@@ -17,10 +18,12 @@ func insertDinheiro(user string, valor float64) {
 }
 
 func insertCompra(userCompra, codigo string, valor float64, qtd int) error {
+	fmt.Println("depoi")
 
 	lances := querys.QueryGetCarteiraUser(codigo, valor)
+	// fmt.Println("antes")
 	for i := 0; i < qtd; i++ {
-
+		fmt.Println(lances[i].IDUser)
 		transVenda := new(structs.Transacao)
 		transVenda.ID = lances[i].IDUser
 		transVenda.Tipo = 2
@@ -31,7 +34,7 @@ func insertCompra(userCompra, codigo string, valor float64, qtd int) error {
 			err := errors.New("usuario de venda não encontrado")
 			return err
 		}
-
+		fmt.Println("usario venda")
 		transCompra := new(structs.Transacao)
 		transCompra.ID = querys.QueryGetUseID(userCompra)
 		transCompra.Descricao = "compra acao" + codigo
@@ -42,8 +45,9 @@ func insertCompra(userCompra, codigo string, valor float64, qtd int) error {
 			err := errors.New("usuario de compra não encontrado")
 			return err
 		}
-		saldo := querys.QueryGetSaldo(transCompra.ID).Valor
 
+		saldo := querys.QueryGetSaldo(transCompra.ID).Valor
+		fmt.Println("usario compra")
 		if saldo < valor {
 			err := errors.New("sem saldo")
 			return err
@@ -54,10 +58,19 @@ func insertCompra(userCompra, codigo string, valor float64, qtd int) error {
 		carteira.ID = transCompra.ID
 		carteira.Lance = 0
 		carteira.Venda = false
+
 		querys.InsertCarteira(*carteira)
+		fmt.Println("InsertCarteira")
+
 		querys.RemoveCarteira(lances[i].IDCarteira)
+		fmt.Println("RemoveCarteira")
+
 		querys.InsertTransacao(*transVenda)
+		fmt.Println("InsertTransacao1")
+
 		querys.InsertTransacao(*transCompra)
+		fmt.Println("InsertTransacao2")
+
 	}
 
 	return nil

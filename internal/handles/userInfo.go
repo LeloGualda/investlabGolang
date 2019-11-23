@@ -10,7 +10,7 @@ import (
 // UserH send user info or get per user
 func UserH(w http.ResponseWriter, r *http.Request) {
 
-	auth, u := checkUser(r)
+	auth, u := CheckUser(r)
 	if !auth {
 		w.WriteHeader(http.StatusUnauthorized)
 		return

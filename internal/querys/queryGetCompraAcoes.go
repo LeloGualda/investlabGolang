@@ -11,7 +11,7 @@ type BaseValores struct {
 func QueryGetCompraAcoes() []BaseValores {
 
 	query := `
-	select
+	select distinct
 	data,
 	valor,
 	codigo

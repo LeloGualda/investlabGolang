@@ -70,6 +70,15 @@ function reducer(state, action) {
         return {
           ...state, buscaAcoes:action.data
         }
+      case actions.getUser:
+        return {
+          ...state, users: action.data
+        }
+      case actions.atualizarAcao:
+        return {
+          ...state, seriesCompra:[]
+        }
+
     default:
       return state
   }

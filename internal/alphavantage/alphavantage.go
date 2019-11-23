@@ -95,18 +95,28 @@ func InserirSeriesAPI(codigo string) {
 func CreateUserBoot() {
 	querys.CreateUser(getUserBoot())
 }
+func CreateUserAdmin() {
+	querys.CreateUser(getUserAdmin())
+}
 func getUserBoot() structs.Credentials {
 	creds := new(structs.Credentials)
 	creds.Username = "BOT"
 	creds.Password = "GhJ8Y!z0%qDPkyLb"
 	return *creds
 }
+func getUserAdmin() structs.Credentials {
+	creds := new(structs.Credentials)
+	creds.Username = "ADMIN"
+	creds.Password = "ADMIN"
+	return *creds
+}
 
 func AddAcaoBot(codigo string) {
 
 	api := querys.QueryGetAcoesEspecifica(codigo)
-
+	// fmt.Println("hey")
 	for _, el := range api {
+		fmt.Println(el.Codigo)
 		add := randAdd()
 		for i := 0; i < add; i++ {
 			carteira := new(structs.Carteira)

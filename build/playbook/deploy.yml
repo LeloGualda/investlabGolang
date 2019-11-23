@@ -2,11 +2,29 @@
 
 - hosts: aws
   become: yes
+  handlers:
+    - name: restart mysql
+      service:
+        name: mysql
+        state: restarted
+      become: yes
 
   tasks:
   - set_fact:
     ansible_facts:
       pkg_mgr: yum
+
+  - name:  remove bin
+    file:
+      path: "/opt/investlab/"
+      state: absent
+    become: yes
+
+  - name:  remove mydb
+    file:
+      path: "~/investlab/db"
+      state: absent
+    become: yes
 
   - name: 'Copy build'
     copy:
@@ -14,6 +32,26 @@
       dest: '/opt/investlab/'
     become: yes
 
+  - name: 'permissão de excutar'
+    command: "chmod +x server"
+    args:
+        chdir: "/opt/investlab/bin/"
+    become: yes
+
+  - name: 'Copy db'
+    copy:
+      src: '/projects/go/src/investlab/db'
+      dest: '~/investlab'
+    become: no
+
+  - name: 'Configura MySQL para aceitar conexões remotas'
+    copy:
+      src: 'files/my.cnf'
+      dest: '/etc/my.cnf'
+    become: yes
+
+  # notify:
+  #   - restart mysql
   # - name: Download sources Mysql
   #   get_url:
   #     url: http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm

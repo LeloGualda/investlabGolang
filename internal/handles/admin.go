@@ -18,6 +18,7 @@ func adminAddAcao(w http.ResponseWriter, r *http.Request, codigo, nome, tipo str
 	el.Name = nome
 	el.Type = tipo
 	querys.InsertAcao(*el)
+	alphavantage.InserirSeriesAPI(codigo)
 }
 
 func updateSeries(codigo string) {
@@ -26,4 +27,8 @@ func updateSeries(codigo string) {
 
 func ativarAcao(codigo string) {
 	alphavantage.AddAcaoBot(codigo)
+}
+
+func getUsers(w http.ResponseWriter, r *http.Request) {
+	returnStruct(w, r, querys.QueryGetUsers())
 }

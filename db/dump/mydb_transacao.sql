@@ -32,7 +32,7 @@ CREATE TABLE `transacao` (
   PRIMARY KEY (`id_transacao`),
   KEY `fk_transacao_usuario1_idx` (`id_user`),
   CONSTRAINT `fk_transacao_usuario1` FOREIGN KEY (`id_user`) REFERENCES `usuario` (`id_user`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,7 +41,7 @@ CREATE TABLE `transacao` (
 
 LOCK TABLES `transacao` WRITE;
 /*!40000 ALTER TABLE `transacao` DISABLE KEYS */;
-INSERT INTO `transacao` VALUES (1,'2019-09-08',3000.57,2,1,'deposito'),(2,'2019-09-08',30000.6,2,1,'deposito'),(3,'2019-09-08',3023.9,1,2,'venda acao:MSFT.MEX'),(4,'2019-09-08',-3023.9,2,3,'compra acaoMSFT.MEX'),(5,'2019-09-08',3023.9,1,2,'venda acao:MSFT.MEX'),(6,'2019-09-08',-3023.9,2,3,'compra acaoMSFT.MEX'),(7,'2019-09-08',3023.9,1,2,'venda acao:MSFT.MEX'),(8,'2019-09-08',-3023.9,2,3,'compra acaoMSFT.MEX'),(9,'2019-09-08',3051.39,1,2,'venda acao:MSFT.MEX'),(10,'2019-09-08',-3051.39,2,3,'compra acaoMSFT.MEX'),(11,'2019-09-08',10000,3,1,'deposito'),(12,'2019-09-08',3023.9,1,2,'venda acao:MSFT.MEX'),(13,'2019-09-08',-3023.9,2,3,'compra acaoMSFT.MEX'),(14,'2019-09-08',3051.39,1,2,'venda acao:MSFT.MEX'),(15,'2019-09-08',-3051.39,2,3,'compra acaoMSFT.MEX'),(16,'2019-09-08',2776.49,2,2,'venda acao:MSFT.MEX'),(17,'2019-09-08',-2776.49,1,3,'compra acaoMSFT.MEX');
+INSERT INTO `transacao` VALUES (1,'2019-09-08',3000.57,2,1,'deposito'),(2,'2019-09-08',30000.6,2,1,'deposito'),(3,'2019-09-08',3023.9,1,2,'venda acao:MSFT.MEX'),(4,'2019-09-08',-3023.9,2,3,'compra acaoMSFT.MEX'),(5,'2019-09-08',3023.9,1,2,'venda acao:MSFT.MEX'),(6,'2019-09-08',-3023.9,2,3,'compra acaoMSFT.MEX'),(7,'2019-09-08',3023.9,1,2,'venda acao:MSFT.MEX'),(8,'2019-09-08',-3023.9,2,3,'compra acaoMSFT.MEX'),(9,'2019-09-08',3051.39,1,2,'venda acao:MSFT.MEX'),(10,'2019-09-08',-3051.39,2,3,'compra acaoMSFT.MEX'),(11,'2019-09-08',10000,3,1,'deposito'),(12,'2019-09-08',3023.9,1,2,'venda acao:MSFT.MEX'),(13,'2019-09-08',-3023.9,2,3,'compra acaoMSFT.MEX'),(14,'2019-09-08',3051.39,1,2,'venda acao:MSFT.MEX'),(15,'2019-09-08',-3051.39,2,3,'compra acaoMSFT.MEX'),(16,'2019-09-08',2776.49,2,2,'venda acao:MSFT.MEX'),(17,'2019-09-08',-2776.49,1,3,'compra acaoMSFT.MEX'),(18,'2019-11-22',3211.56,1,2,'venda acao:MSFT.MEX'),(19,'2019-11-22',-3211.56,2,3,'compra acaoMSFT.MEX'),(20,'2019-11-22',104.091,5,2,'venda acao:BOVA11.SAO'),(21,'2019-11-22',-104.091,2,3,'compra acaoBOVA11.SAO'),(22,'2019-11-22',13.7802,5,2,'venda acao:ITSA4.SAO'),(23,'2019-11-22',-13.7802,2,3,'compra acaoITSA4.SAO'),(24,'2019-11-22',8.08,5,2,'venda acao:BBD'),(25,'2019-11-22',-8.08,2,3,'compra acaoBBD');
 /*!40000 ALTER TABLE `transacao` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -54,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-11-21 19:17:39
+-- Dump completed on 2019-11-22 19:59:22

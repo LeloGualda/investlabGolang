@@ -32,6 +32,8 @@ export default {
     getSaldo: "GET_SALDO_USER",
     getTemporalAcao:"GET_TEMPORAL_ACAO",
     buscaApi:"SEARCH_API",
+    atualizarAcao:"ATUALIZAR_ACAO",
+    getUser:'GET_USER',
     initialState: {
         api,
         newclient,
@@ -40,6 +42,7 @@ export default {
             username: '',
             id: 0
         },
+        users:[],
         erros: {
             auth: null
         },
