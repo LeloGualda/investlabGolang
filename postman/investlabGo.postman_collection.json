@@ -1,0 +1,788 @@
+{
+	"info": {
+		"_postman_id": "5f03a328-abd0-451f-a26a-cdb68c5e551b",
+		"name": "investlabGo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "admin",
+			"item": [
+				{
+					"name": "alphavantage",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=Abev3.SAO&apikey=EUXWPTWM2CR9P8D7",
+							"protocol": "https",
+							"host": [
+								"www",
+								"alphavantage",
+								"co"
+							],
+							"path": [
+								"query"
+							],
+							"query": [
+								{
+									"key": "function",
+									"value": "GLOBAL_QUOTE"
+								},
+								{
+									"key": "symbol",
+									"value": "Abev3.SAO"
+								},
+								{
+									"key": "apikey",
+									"value": "EUXWPTWM2CR9P8D7"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "search api",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "aurelio",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "123456",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/admin/search/query?keyword=MSFT",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"admin",
+								"search",
+								"query"
+							],
+							"query": [
+								{
+									"key": "keyword",
+									"value": "MSFT"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add ação",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "aurelio",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "123456",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/admin/addCarteira/query?codigo=BOVA11.SAO&tipo=Equity&nome=iShares Ibovespa Fundo de Índice ETF",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"admin",
+								"addCarteira",
+								"query"
+							],
+							"query": [
+								{
+									"key": "codigo",
+									"value": "BOVA11.SAO"
+								},
+								{
+									"key": "tipo",
+									"value": "Equity"
+								},
+								{
+									"key": "nome",
+									"value": "iShares Ibovespa Fundo de Índice ETF"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update serie",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "aurelio",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "123456",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/admin/updateSeries/BOVA11.SAO",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"admin",
+								"updateSeries",
+								"BOVA11.SAO"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "users",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "aurelio",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "123456",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/admin/ativarAcao/BOVA11.SAO",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"admin",
+								"ativarAcao",
+								"BOVA11.SAO"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add ação Copy",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "aurelio",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "123456",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/admin/addCarteira/query?codigo=BOVA11.SAO&tipo=Equity&nome=iShares Ibovespa Fundo de Índice ETF",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"admin",
+								"addCarteira",
+								"query"
+							],
+							"query": [
+								{
+									"key": "codigo",
+									"value": "BOVA11.SAO"
+								},
+								{
+									"key": "tipo",
+									"value": "Equity"
+								},
+								{
+									"key": "nome",
+									"value": "iShares Ibovespa Fundo de Índice ETF"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "create user",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n \"username\":\"aurelio\",\n \"password\":\"123456\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/signup",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "session success",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "aurelio",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "123456",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/user/info",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"info"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "vender",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "41253a09-1bf7-4339-93bf-5e2964ebe4c7",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "aurelio",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "123456",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/vender/query?valor=3023.9&codigo=MSFT.MEX&qtd=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"vender",
+								"query"
+							],
+							"query": [
+								{
+									"key": "valor",
+									"value": "3023.9"
+								},
+								{
+									"key": "codigo",
+									"value": "MSFT.MEX"
+								},
+								{
+									"key": "qtd",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "comprar",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "41253a09-1bf7-4339-93bf-5e2964ebe4c7",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "aurelio",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "123456",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/comprar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"comprar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "comprar acao",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "41253a09-1bf7-4339-93bf-5e2964ebe4c7",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "123",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "prof",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/comprar/MSFT.MEX",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"comprar",
+								"MSFT.MEX"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "vender",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "41253a09-1bf7-4339-93bf-5e2964ebe4c7",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "aurelio",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "123456",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/vender/query?valor=3023.9&codigo=MSFT.MEX&qtd=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"vender",
+								"query"
+							],
+							"query": [
+								{
+									"key": "valor",
+									"value": "3023.9"
+								},
+								{
+									"key": "codigo",
+									"value": "MSFT.MEX"
+								},
+								{
+									"key": "qtd",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "saldo",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "41253a09-1bf7-4339-93bf-5e2964ebe4c7",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "123",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "prof",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/saldo",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"saldo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "usuario acoes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "41253a09-1bf7-4339-93bf-5e2964ebe4c7",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "aurelio",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "123456",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/vender/query?valor=3023.9&codigo=MSFT.MEX&qtd=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"vender",
+								"query"
+							],
+							"query": [
+								{
+									"key": "valor",
+									"value": "3023.9"
+								},
+								{
+									"key": "codigo",
+									"value": "MSFT.MEX"
+								},
+								{
+									"key": "qtd",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "temporal acao",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "41253a09-1bf7-4339-93bf-5e2964ebe4c7",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "123",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "prof",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/comprar/temporal/MSFT.MEX",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"comprar",
+								"temporal",
+								"MSFT.MEX"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "lance",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "41253a09-1bf7-4339-93bf-5e2964ebe4c7",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "aurelio",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "123456",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/lance/query?lance=2&codigo=MSFT.MEX&qtd=1&vender=true",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"lance",
+								"query"
+							],
+							"query": [
+								{
+									"key": "lance",
+									"value": "2"
+								},
+								{
+									"key": "codigo",
+									"value": "MSFT.MEX"
+								},
+								{
+									"key": "qtd",
+									"value": "1"
+								},
+								{
+									"key": "vender",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
