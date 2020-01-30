@@ -13,7 +13,7 @@ import (
 	"../structs"
 )
 
-var key = "EUXWPTWM2CR9P8D7"
+var key = ""
 
 func getApiPesquisa(body []byte) (*structs.ApiPesquisa, error) {
 	var s = new(structs.ApiPesquisa)
